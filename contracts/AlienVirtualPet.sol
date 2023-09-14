@@ -12,8 +12,8 @@ import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
         uint256 wisdom;
         uint256 rarity;
         uint256 charisma;
-        string color;
-        string name;
+        uint256 strength;
+        uint256 height;
     }
 
 contract AlienVirtualPet is
@@ -91,17 +91,17 @@ contract AlienVirtualPet is
         uint wisdom = (((_word % 10000) / 100) % 18);
         uint rarity = (((_word % 1000000) / 10000) % 18);
         uint charisma = (((_word % 100000000) / 1000000) % 18);
-        uint color = (((_word % 10000000000) / 100000000) % 18);
-        uint color = (((_word % 1000000000000) / 10000000000) % 18);
+        uint strength = (((_word % 10000000000) / 100000000) % 18);
+        uint height = (((_word % 1000000000000) / 10000000000) % 18);
 
         aliens.push(
             Alien(
-                 uint256 intelligence;
-                 uint256 wisdom;
-                 uint256 rarity;
-                 uint256 charisma;
-                 string color;
-                 string color;
+                  intelligence,
+                  wisdom,
+                  rarity,
+                  charisma,
+                  strength,
+                  height
             )
         );
 
