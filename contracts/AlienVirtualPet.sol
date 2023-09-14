@@ -13,43 +13,47 @@ contract AlienVirtualNFT is ERC721URIStorage, Ownable, VRFConsumerBase {
     Counters.Counter private _tokenIds;
 
     struct Alien {
-        uint256 energy;
-        uint256 speed;
-        uint256 rarity;
+        uint256 intelligence;
+        uint256 wisdom;
+        uint256 charisma;
+        uint256 experience;
         string color;
-        string alienType;
+        string name;
     }
 
     Alien[] public aliens;
+    mapping(bytes32 => string)  requestToAlienName;
+    mapping(bytes32 => address) requestTosender;
+    mapping(bytes32 => uint256) requestTokenId;
 
     // Chainlink VRF variables
     bytes32 internal keyHash;
     uint256 internal fee;
+    uint256 public randomResult;
+    address public VRFCoordinator;
+    address public LinkToken;
 
-    constructor(
-        address vrfCoordinator,
-        address linkToken,
-        bytes32 vrfKeyHash,
-        uint256 vrfFee
-    )
+    //
+
+    constructor(address _VRFCoordinator, address _LinkToken, bytes32 _keyhash)
+        VRFConsumerBase(_VRFCoordinator, _LinkToken)
         ERC721("AlienVirtualNFT", "AVN")
-        VRFConsumerBase(vrfCoordinator, linkToken)
-    {
-        keyHash = vrfKeyHash;
-        fee = vrfFee;
+    {   
+        VRFCoordinator = _VRFCoordinator;
+        LinkToken = _LinkToken;
+        keyHash = _keyhash;
+        fee = 0.1 * 10**18; // 0.1 LINK
     }
-
+    
     // Request randomness from Chainlink VRF
-    function getRandomness() external onlyOwner() returns(bytes32 requestId) {
+    function requestNewAlien(string memory name) public returns(bytes32) {
         require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK tokens");
-        return requestRandomness(keyHash, fee);
+        bytes32 requestId = requestRandomness(keyHash, fee);
+        requestToAlienName[requestId] = name;
+        requestTosender[requestId] = msg.sender;
+        return requestId;
     }
 
-    function fulfillRandomness(bytes32 requestedId, uint256 randomness) internal override {
-        uint256 index = randomness % aliens.length;
-
-        // Mint the Alien with the selected traits
-        _mint(msg.sender, index);
-    }
+    
 
 }
