@@ -1,18 +1,12 @@
 import { ethers } from "hardhat";
 
 async function main() {
+  const Consumer = await ethers.deployContract("VRFv2Consumer", [14197]);
+
+  await Consumer.waitForDeployment();
+
+  console.log(Consumer.target);
   
-  const lock = await ethers.deployContract("AlienVirtualPet", [unlockTime], {
-    
-  });
-
-  await lock.waitForDeployment();
-
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
 }
 
 // We recommend this pattern to be able to use async/await everywhere
