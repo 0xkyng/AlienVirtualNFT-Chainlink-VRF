@@ -107,4 +107,8 @@ contract AlienVirtualPet is
 
         _safeMint(msg.sender, tokenID);
     }
+
+     function getTotalAliens() external view returns (uint _num) {
+        _num = aliens.length;
+    }
 }
